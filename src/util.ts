@@ -1,4 +1,5 @@
-import { config } from "process"
+import { utils } from 'umi'
+import { join } from 'path'
 
 /**
  * API约束数据类型
@@ -11,8 +12,27 @@ export function defineRequireConfig (config: RequestBaseConfig): RequestBaseConf
   return config
 }
 
+export function getCurrentServiceList (options: {
+  readonly path: string
+  readonly pattern: string,
+}): Array<string> {
+  const { glob, compatESModuleRequire } = utils
+  const { path, pattern } = options
 
-export function getApiList () {
-  const filePathReg = `^([a-z])\.(js|json|ts)$`
-  
+  return glob.sync(pattern, {
+    cwd: path
+  })
+  .map((f: string) => {
+    return join(path, f)
+  })
+  .map(utils.winPath)
+  .filter((f: string) => {
+    if (/\.d.ts$/.test(f)) return false
+    if (/\.(test|e2e|spec).(j|t)sx?$/.test(f)) return false
+    return true
+  })
+}
+
+export function parsePathsInObject (paths: Array<string>): Array<RequestBaseConfig> {
+  return paths.map((p: string) => require(p))
 }
