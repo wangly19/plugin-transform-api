@@ -36,3 +36,6 @@ export function getCurrentServiceList (options: {
 export function parsePathsInObject (paths: Array<string>): Array<RequestBaseConfig> {
   return paths.map((p: string) => require(p))
 }
+
+
+export function fetchRequestRenderStringIfy (): string {}

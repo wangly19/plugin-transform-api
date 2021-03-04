@@ -69,18 +69,24 @@ export default function (api: IApi) {
 
     const paths: Array<string> = getCurrentServiceList({
       path: getSrcServicePath(),
-      // pattern: `**/${getServicesDir()}/**/*.{ts,tsx,js,jsx}`
       pattern: '**/*.{ts,tsx,js,jsx}'
     })
     const requestConfigList: Array<RequestBaseConfig> = parsePathsInObject(paths)
 
     
-    const runtimeTpl = readFileSync(join(__dirname, '/template/runtime_build.tpl'), 'utf-8');
+    const runtimeTpl = readFileSync(
+      join(__dirname, '/template/runtime_fetch.tpl'), 'utf-8'
+    );
 
     api.writeTmpFile({
       path: 'plugin-service/api.ts',
       content: Mustache.render(runtimeTpl, {
-        REQUEST_PATH: 'umi-request'
+        REQUEST_PATH: 'umi-request',
+        REQUEST_FUNCTION_LIST: [{
+          METHOD_NAME: '1'
+        }, {
+          METHOD_NAME: '2'
+        }]
       })
     })
   })

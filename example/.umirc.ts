@@ -11,9 +11,6 @@ export default defineConfig({
     { path: '/', component: '@/pages/index' },
   ],
   fastRefresh: {},
-  dva: {
-    immer: true,
-  },
   transformApi: {
     path: 'services',
     requestPath: '/request/mode'
