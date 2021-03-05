@@ -8,6 +8,12 @@ import {
   RequestBaseConfig
 } from './util'
 
+import { 
+  RequestASTModule,
+  getAllRequestModule,
+} from './render';
+import { config } from 'process';
+
 export default function (api: IApi) {
   
   /**
@@ -73,6 +79,10 @@ export default function (api: IApi) {
     })
     const requestConfigList: Array<RequestBaseConfig> = parsePathsInObject(paths)
 
+    const requestASTModules: Array<RequestASTModule> = getAllRequestModule(requestConfigList)
+
+    logger.info(requestASTModules)
+
     
     const runtimeTpl = readFileSync(
       join(__dirname, '/template/runtime_fetch.tpl'), 'utf-8'
@@ -81,12 +91,9 @@ export default function (api: IApi) {
     api.writeTmpFile({
       path: 'plugin-service/api.ts',
       content: Mustache.render(runtimeTpl, {
-        REQUEST_PATH: 'umi-request',
-        REQUEST_FUNCTION_LIST: [{
-          METHOD_NAME: '1'
-        }, {
-          METHOD_NAME: '2'
-        }]
+        requestPath: api.config.transformApi?.requestPath,
+        requestASTModules,
+        test: '1111'
       })
     })
   })

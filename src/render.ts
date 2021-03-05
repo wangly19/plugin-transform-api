@@ -1,4 +1,9 @@
-import { RequestBaseConfig, RequestMethod, RequestMethodAndURL } from './util';
+import {
+  RequestBaseConfig,
+  RequestMethod,
+  RequestMethodAndURL,
+  stringIfyRequestPathJoin
+} from './util';
 
 import { utils } from 'umi';
 
@@ -16,7 +21,7 @@ export type TupleAfterCutting = [RequestMethod, string];
  * @param { RequestBaseConfig } exportServiceModule 导出的配置对象
  * @returns { Array<RequestASTModule> }
  */
-export function transformRequestFunctionModule(
+function transformRequestFunctionModule(
   exportServiceModule: RequestBaseConfig,
 ): Array<RequestASTModule> {
   // 遍历对象
@@ -24,19 +29,19 @@ export function transformRequestFunctionModule(
     exportServiceModule,
   ).map((k: string) => {
     const value: RequestMethodAndURL = exportServiceModule[k];
-    const [method, transformPreUrl]: TupleAfterCutting = getCurrentMethodAndURL(
-      value,
-    );
+    const [method, transformPreUrl]: TupleAfterCutting = getCurrentMethodAndURL(value,);
+
+    console.log(method, transformPreUrl)
 
     // throw error
-    if (method) {
+    if (!method) {
       throw new Error(
         `[error]: 没有找到当前配置的请求方法，请检查${k}的配置是否正确。`,
       );
     }
 
     // throw error
-    if (transformPreUrl) {
+    if (!transformPreUrl) {
       throw new Error(
         `[error]: 没有找到当前配置的请求链接api，请检查${k}的配置是否正确。`,
       );
@@ -73,14 +78,16 @@ export function getAllRequestModule(
   return utils.lodash.flatten(currentRequestConfigModule);
 }
 
-export function generateRequestFunctionModules() {}
+export function generateRequestFunctionConfig(requestQueue: Array<RequestASTModule>): Array<any> {
+
+}
 
 /**
  * 切割当前URL和Method为元组方法
  * @param { RequestMethodAndURL } configAttr 当前配置的url和method
  * @returns { TupleAfterCutting }
  */
-export function getCurrentMethodAndURL(
+function getCurrentMethodAndURL(
   configAttr: RequestMethodAndURL,
 ): TupleAfterCutting {
   return configAttr.split(' ') as TupleAfterCutting;
@@ -91,15 +98,15 @@ export function getCurrentMethodAndURL(
  * @param { string } transformBeforeURL 转换前url
  * @returns { object }
  */
-export function getCurrentLinkParamsAndURL(
+function getCurrentLinkParamsAndURL(
   transformBeforeURL: string,
 ): {
   transformAfterURL: string;
   linkParameter: Array<string>;
 } {
-  const [transformAfterURL, ...linkParameter] = transformBeforeURL.split('/:');
+  const [url, ...linkParameter] = transformBeforeURL.split('/:');
   return {
-    transformAfterURL,
+    transformAfterURL: stringIfyRequestPathJoin(url, linkParameter),
     linkParameter,
   };
 }

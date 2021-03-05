@@ -1,12 +1,10 @@
-import * as request from '{{ REQUEST_PATH }}'
+import * as request from '{{ requestPath }}'
 
 
-{{ #REQUEST_FUNCTION_LIST }}
+{{ #requestASTModules }}
 
-export function {{ METHOD_NAME }} () {
-  return request({
-    
-  })
+export function {{ functionName }} ({{ test }}) {
+  return request({})
 }
 
-{{ /REQUEST_FUNCTION_LIST }}
+{{ /requestASTModules }}

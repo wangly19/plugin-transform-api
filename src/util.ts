@@ -4,7 +4,7 @@ import { join } from 'path'
 /**
  * API约束数据类型
  */
-export type RequestMethod = 'POST' | 'GET' | 'DELETE' | 'PUT' | 'OPTIONS'
+export type RequestMethod = 'POST' | 'GET' | 'DELETE' | 'PUT' | 'OPTIONS' | 'PATCH'
 export type RequestMethodAndURL = `${RequestMethod} /${string}`
 export type RequestBaseConfig = Record<string, RequestMethodAndURL>
 
@@ -33,9 +33,25 @@ export function getCurrentServiceList (options: {
   })
 }
 
-export function parsePathsInObject (paths: Array<string>): Array<RequestBaseConfig> {
+export function parsePathsInObject (
+  paths: Array<string>
+): Array<RequestBaseConfig> {
   return paths.map((p: string) => require(p))
 }
 
 
-export function fetchRequestRenderStringIfy (): string {}
+/**
+ * 
+ * @param { string } url 当前标准url
+ * @param linkParameter 当前url上的param参数
+ * @returns { string } 产生的模板链接
+ */
+export function stringIfyRequestPathJoin (
+  url: string,
+  linkParameter: Array<string>
+): string {
+  const stringIfyLink = linkParameter.map((
+    param: string
+  ) => `/{params.${param}}`)
+  return `${url}${stringIfyLink.join('')}`
+}
