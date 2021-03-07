@@ -3,16 +3,17 @@ import { defineConfig } from 'umi';
 const request = () => 1
 
 export default defineConfig({
-  plugins: [require.resolve('../lib')],
+  plugins: [require.resolve('../dist')],
   nodeModulesTransform: {
     type: 'none',
   },
+  dva: {},
   routes: [
     { path: '/', component: '@/pages/index' },
   ],
   fastRefresh: {},
-  transformApi: {
+  interface: {
     path: 'services',
-    requestPath: '/request/mode'
+    requestPath: 'umi-request'
   }
 });

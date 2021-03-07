@@ -1,5 +1,5 @@
 import { utils } from 'umi'
-import { join } from 'path'
+const { join } = require('path')
 
 /**
  * API约束数据类型
@@ -7,16 +7,23 @@ import { join } from 'path'
 export type RequestMethod = 'POST' | 'GET' | 'DELETE' | 'PUT' | 'OPTIONS' | 'PATCH'
 export type RequestMethodAndURL = `${RequestMethod} /${string}`
 export type RequestBaseConfig = Record<string, RequestMethodAndURL>
+export interface RequestMethodBodyName {
+  POST: 'data'
+  GET: 'params'
+  PUT: 'data'
+}
 
-export function defineRequireConfig (config: RequestBaseConfig): RequestBaseConfig {
-  return config
+export const requestMethodBodyName: RequestMethodBodyName = {
+  POST: 'data',
+  GET: 'params',
+  PUT: 'data'
 }
 
 export function getCurrentServiceList (options: {
   readonly path: string
   readonly pattern: string,
 }): Array<string> {
-  const { glob, compatESModuleRequire } = utils
+  const { glob } = utils
   const { path, pattern } = options
 
   return glob.sync(pattern, {
@@ -36,7 +43,15 @@ export function getCurrentServiceList (options: {
 export function parsePathsInObject (
   paths: Array<string>
 ): Array<RequestBaseConfig> {
-  return paths.map((p: string) => require(p))
+
+  console.log('[create]: require')
+  return paths.map((p: string) => {
+
+    console.log(require.resolve(p))
+
+    delete require.cache[require.resolve(p)]
+    return utils.compatESModuleRequire(require(p))
+  })
 }
 
 
@@ -45,6 +60,7 @@ export function parsePathsInObject (
  * @param { string } url 当前标准url
  * @param linkParameter 当前url上的param参数
  * @returns { string } 产生的模板链接
+ * `/${param}`
  */
 export function stringIfyRequestPathJoin (
   url: string,
@@ -52,6 +68,25 @@ export function stringIfyRequestPathJoin (
 ): string {
   const stringIfyLink = linkParameter.map((
     param: string
-  ) => `/{params.${param}}`)
+  ) => '/${' + param + '}')
   return `${url}${stringIfyLink.join('')}`
+}
+
+
+/**
+ * 
+ * @param { Array<string> } linkParameter 当前link params参数列表
+ * @returns { string } 导出template语句
+ */
+export function getExportPayloadTemplate (linkParameter: Array<string>): string {
+  if (linkParameter.length > 0) {
+    return `const { ${ linkParameter.join(', ') }, ...data } = payload`
+  }
+  return ''
+}
+
+
+export function defineRequestConfig (config: RequestBaseConfig): RequestBaseConfig
+export function defineRequestConfig (config: any) {
+  return config
 }

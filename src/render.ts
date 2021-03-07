@@ -2,7 +2,9 @@ import {
   RequestBaseConfig,
   RequestMethod,
   RequestMethodAndURL,
-  stringIfyRequestPathJoin
+  stringIfyRequestPathJoin,
+  requestMethodBodyName,
+  getExportPayloadTemplate
 } from './util';
 
 import { utils } from 'umi';
@@ -12,6 +14,8 @@ export type RequestASTModule = {
   url: string;
   method: RequestMethod;
   linkParams?: Array<string>;
+  exportTemp?: string,
+  paramType?: ['data', 'params']
 };
 
 export type TupleAfterCutting = [RequestMethod, string];
@@ -30,8 +34,6 @@ function transformRequestFunctionModule(
   ).map((k: string) => {
     const value: RequestMethodAndURL = exportServiceModule[k];
     const [method, transformPreUrl]: TupleAfterCutting = getCurrentMethodAndURL(value,);
-
-    console.log(method, transformPreUrl)
 
     // throw error
     if (!method) {
@@ -56,6 +58,8 @@ function transformRequestFunctionModule(
       url: transformAfterURL,
       method,
       linkParams: linkParameter,
+      exportTemp: getExportPayloadTemplate(linkParameter),
+      paramType: requestMethodBodyName[method] || 'data',
     };
   });
 

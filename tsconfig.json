@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "esnext",
+    "module": "ES2015",
     "moduleResolution": "node",
     "jsx": "preserve",
     "allowJs": true,
@@ -10,14 +12,20 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "suppressImplicitAnyIndexErrors": true,
-    "declaration": true
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "types": ["node"]
   },
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
     "node_modules",
     "dist",
     "**/*.spec.ts",
     "lib",
+    "test",
     "fixtures",
-    "examples"
-  ]
+    "example"
+  ],
 }

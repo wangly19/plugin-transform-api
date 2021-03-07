@@ -1,18 +1,19 @@
-import { IApi } from '@umijs/types';
-import { join } from 'path'
-import { readFileSync } from 'fs'
+import { IApi } from 'umi';
+const { join } = require('path')
+const { readFileSync } = require('fs')
 
 import { 
   getCurrentServiceList,
   parsePathsInObject,
-  RequestBaseConfig
+  RequestBaseConfig,
 } from './util'
+
+export { defineRequestConfig } from './util'
 
 import { 
   RequestASTModule,
   getAllRequestModule,
 } from './render';
-import { config } from 'process';
 
 export default function (api: IApi) {
   
@@ -33,7 +34,7 @@ export default function (api: IApi) {
    * @returns { string }
    */
   function getServicesDir (): string {
-    return api.config.transformApi?.path || 'api'
+    return api.config.interface?.path || 'api'
   }
 
   /**
@@ -46,13 +47,10 @@ export default function (api: IApi) {
 
   /**
    * 声明当前api配置
-   * @example
-   * { transformApi: true }
-   * @type { boolean } transformApi
    * @returns { unknown }
    */
   api.describe({
-    key: 'transformApi',
+    key: 'interface',
     config: {
       default: {},
       schema(joi) {
@@ -69,33 +67,53 @@ export default function (api: IApi) {
    * @link @/.umi/plugin-transform-api
    * @returns { unknown }
    */
-  api.onGenerateFiles(() => {
+  api.onGenerateFiles(async () => {
 
     const { Mustache } = utils
 
     const paths: Array<string> = getCurrentServiceList({
       path: getSrcServicePath(),
-      pattern: '**/*.{ts,tsx,js,jsx}'
+      pattern: '**/*.{ts,js,json}'
     })
     const requestConfigList: Array<RequestBaseConfig> = parsePathsInObject(paths)
 
     const requestASTModules: Array<RequestASTModule> = getAllRequestModule(requestConfigList)
-
-    logger.info(requestASTModules)
-
     
     const runtimeTpl = readFileSync(
       join(__dirname, '/template/runtime_fetch.tpl'), 'utf-8'
     );
 
     api.writeTmpFile({
-      path: 'plugin-service/api.ts',
+      path: 'plugin-interface/api.ts',
       content: Mustache.render(runtimeTpl, {
-        requestPath: api.config.transformApi?.requestPath,
+        requestPath: utils.winPath(api.config.interface?.requestPath),
         requestASTModules,
-        test: '1111'
       })
     })
+
+    const exportTpl = readFileSync(
+      join(__dirname, '/template/runtime_export.tpl'), 'utf-8'
+    );
+
+    api.writeTmpFile({
+      path: 'plugin-interface/exports.ts',
+      content: Mustache.render(exportTpl, {})
+    })
+
   })
+
+  
+  api.addTmpGenerateWatcherPaths(() => {
+    const path: string = getSrcServicePath()
+    return [path]
+  });
+
+
+  api.addUmiExports(() => {
+    return {
+      specifiers: ['defineRequireConfig'],
+      source: '../plugin-interface/exports'
+    }
+  });
 
 }

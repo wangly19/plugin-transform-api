@@ -1,7 +1,9 @@
 {
   "name": "@umijs/plugin-transform-api",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
+  "types": "dist/util.d.ts",
   "description": "转换api目录下所有请求接口配置文件",
+  "version": "1.0.0",
   "authors": {
     "name": "wangly19",
     "email": "18607948581@163.com"
@@ -9,7 +11,7 @@
   "repository": "github.com/wangly19/@umijs/plugin-transform-api",
   "scripts": {
     "start": "cross-env APP_ROOT=example umi dev",
-    "build": "father-build",
+    "build": "father-build && cp -r ./src/template ./dist/",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
     "test": "umi-test",
     "test:coverage": "umi-test --coverage",
@@ -35,7 +37,7 @@
     "body-parser": "^1.18.2",
     "cross-env": "^6.0.3",
     "express": "^4.15.3",
-    "father-build": "^1.17.2",
+    "father-build": "^1.19.2",
     "lerna": "^3.20.2",
     "lint-staged": "^10.0.8",
     "npm-run-all": "^4.1.5",
@@ -46,6 +48,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-test-renderer": "^16.9.0",
+    "rollup-plugin-typescript2": "^0.30.0",
     "test-umi-plugin": "^0.1.0",
     "umi": "^3.1.0",
     "yorkie": "^2.0.0"
@@ -55,5 +58,10 @@
   },
   "files": [
     "lib"
-  ]
+  ],
+  "dependencies": {
+    "@types/esprima": "^4.0.2",
+    "esprima": "^4.0.1",
+    "estraverse": "^5.2.0"
+  }
 }
