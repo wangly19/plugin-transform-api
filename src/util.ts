@@ -84,9 +84,3 @@ export function getExportPayloadTemplate (linkParameter: Array<string>): string 
   }
   return ''
 }
-
-
-export function defineRequestConfig (config: RequestBaseConfig): RequestBaseConfig
-export function defineRequestConfig (config: any) {
-  return config
-}

@@ -55,100 +55,162 @@
 
 ## 简介
 
+插件功能作用于约定式`API`接口配置的编译时转换，为`umijs`提供接口转换能力，开发者不再需要进行频繁的手写`service spi` 函数。插件会自动帮您转换成对应的`Promise<R>`的函数，只需要从`plugin`或者是`umi`中引用就可以完成接口请求的问题。
 
-插件功能作用于约定式`API`接口配置的编译时转换，相对于处理微内核插件的时间消耗
+
+插件相对来说是在编译时完成的，相对来说，会比运行时处理`约定式接口承诺`减少了多余的开销，利用`umijs`脚手架的`微内核`能力可以做到可拔插，剔除打包依赖的作用。
+
+> 配置 -> 接口函数 -> umi
 
 
-###### 开发前的配置要求
+## 使用方法
 
-1. xxxxx x.x.x
-2. xxxxx x.x.x
+通过包管理工具安装当前插件到运行时以来，安装结束后可以在`package.json`的`devDependencies`中可以查看当前版本依赖。
 
-###### **安装步骤**
+```shell
+# yarn
+yarn add plugin-interface -D
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-
-```sh
-git clone https://github.com/shaojintian/Best_README_template.git
+# npm
+npm install plugin-interface -D
 ```
 
-### 文件目录说明
-eg:
+### 添加插件
+
+根据相应的开发配置引入插件，一般在`.umirc.ts` 或者 `config/*`下配置对应的配置可以对应注入相应功能。参考以下配置: 
+
+```ts
+export default defineConfig({
+  plugins: ['plugin-interface'],
+  nodeModulesTransform: {
+    type: 'none',
+  },
+  routes: [
+    { path: '/', component: '@/pages/index' },
+  ],
+  fastRefresh: {},
+  interface: {
+    path: 'services',
+    requestPath: '@/utils/request'
+  }
+});
 
 ```
-filetree 
-├── ARCHITECTURE.md
-├── LICENSE.txt
-├── README.md
-├── /account/
-├── /bbs/
-├── /docs/
-│  ├── /rules/
-│  │  ├── backend.txt
-│  │  └── frontend.txt
-├── manage.py
-├── /oa/
-├── /static/
-├── /templates/
-├── useless.md
-└── /util/
+
+相对应插件会在开发时监听对应文件夹下的文件，并且产生最新的`函数接口`。
+
+### 参数配置
+
+|  名称   |  类型  | 描述 | 默认值 |
+|  ----  | ----  |---- | ---- |
+| path  | `string` | 定义目标当前需要监听的路径地址，默认配置为`api` | `api` |
+| requestPath  | `string` | 接口请求函数的页面地址，最终映射到`import()`当中使用 | `__` |
+| ...  | `any` |  待添加 | `__` |
+
+### 添加一个配置
+
+如何添加一个最基本的配置来运行脚本添加工具？使用起来是非常方便的。
+
+#### JSON格式文件
+
+```JSON
+{
+  "getUserInfo": "POST /mall-port/user/info",
+  "login": "POST /mall-port/user/login",
+  "deleteUser": "POST /mall-port/user/:id"
+}
+```
+
+#### JS & TS 文件
+
+```javaScript
+module.export = {
+  getUserInfo: "POST /mall-port/user/info",
+  login: "POST /mall-port/user/login",
+  deleteUser: "POST /mall-port/user/:id"
+}
+```
+
+使用以上两种参数行为会为您在`.umi/plugin-interface`下生成新的插件函数，且默认配置为`export`方式。同时会将其`export`的内容导入到`umi`的导出项内。
+
+```typeScript
+// @ts-nocheck
+import request from 'umi-request'
+
+export function getUserInfo <T = any, O = Record<string, any>, R = any>(
+  payload?: T = {}, 
+  options?: O = {},
+): Promise<R> {
+
+    /* [info]: @no link params */
+  
+  return request( `/mall-port/user/info`, {
+    data: payload,
+    method: 'POST',
+    ...options
+  })
+}
+
+
+export function login <T = any, O = Record<string, any>, R = any>(
+  payload?: T = {}, 
+  options?: O = {},
+): Promise<R> {
+
+    /* [info]: @no link params */
+  
+  return request( `/mall-port/user/login`, {
+    data: payload,
+    method: 'POST',
+    ...options
+  })
+}
+
+
+export function deleteUser <T = any, O = Record<string, any>, R = any>(
+  payload?: T = {}, 
+  options?: O = {},
+): Promise<R> {
+
+    const { id, ...data } = payload
+  
+  return request( `/mall-port/user/${id}`, {
+    data: data,
+    method: 'POST',
+    ...options
+  })
+}
+
 
 ```
 
+### 如何引用
 
+当有了一份基于`typeScript`的接口函数，可以通过以下两种方式进行引入。a=a=a==
 
+```typeScript
+import { deleteUser } from 'umi'
 
+deleteUser().then()
+```
 
-### 开发的架构 
+```typeScript
+import { deleteUser } from '@@/plugin-interface/api'
+deleteUser().then()
+```
 
-请阅读[ARCHITECTURE.md](https://github.com/shaojintian/Best_README_template/blob/master/ARCHITECTURE.md) 查阅为该项目的架构。
+## 如何参与开源项目
 
-### 部署
+1. 克隆当前仓库
+2. 创建你自己的开发分支(`git checkout -b [your branch name]`)
+3. 提交你的代码修改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到`Github`仓库 (`git push origin feature/AmazingFeature`)
+5. 与我联系后，打开一个`PR(Pull Request)`推送给我。
+6.  一星期后会进行仓库`branch merge`
 
-暂无
+## 贡献者
 
-### 使用到的框架
-
-- [xxxxxxx](https://getbootstrap.com)
-- [xxxxxxx](https://jquery.com)
-- [xxxxxxx](https://laravel.com)
-
-### 贡献者
-
-请阅读**CONTRIBUTING.md** 查阅为该项目做出贡献的开发者。
-
-#### 如何参与开源项目
-
-贡献使开源社区成为一个学习、激励和创造的绝佳场所。你所作的任何贡献都是**非常感谢**的。
-
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
-
-### 版本控制
-
-该项目使用Git进行版本管理。您可以在repository参看当前可用版本。
-
-### 作者
-
-xxx@xxxx
-
-知乎:xxxx  &ensp; qq:xxxxxx    
-
- *您也可以在贡献者名单中参看所有参与该项目的开发者。*
-
-### 版权说明
-
-该项目签署了MIT 授权许可，详情请参阅 [LICENSE.txt](https://github.com/shaojintian/Best_README_template/blob/master/LICENSE.txt)
-
-### 鸣谢
-
+## 资源
 
 - [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
 - [Img Shields](https://shields.io)

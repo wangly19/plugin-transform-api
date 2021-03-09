@@ -1,6 +1,6 @@
 export default [{
+  // 包类型 -> node plugin
   target: 'node',
-  cjs: { type: 'rollup' },
+  cjs: { type: 'babel', lazy: true },
   disableTypeCheck: true,
-  extraExternals: ['umi', 'react']
 }];

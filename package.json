@@ -11,7 +11,7 @@
   "repository": "github.com/wangly19/@umijs/plugin-transform-api",
   "scripts": {
     "start": "cross-env APP_ROOT=example umi dev",
-    "build": "father-build && cp -r ./src/template ./dist/",
+    "build": "father-build",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
     "test": "umi-test",
     "test:coverage": "umi-test --coverage",

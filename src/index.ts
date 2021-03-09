@@ -1,14 +1,12 @@
 import { IApi } from 'umi';
-const { join } = require('path')
-const { readFileSync } = require('fs')
+import { readFileSync } from 'fs'
+import { join } from 'path'
 
 import { 
   getCurrentServiceList,
   parsePathsInObject,
   RequestBaseConfig,
 } from './util'
-
-export { defineRequestConfig } from './util'
 
 import { 
   RequestASTModule,
@@ -103,17 +101,25 @@ export default function (api: IApi) {
   })
 
   
+  /** 添加文件修改时的监听，对当前的 */
   api.addTmpGenerateWatcherPaths(() => {
     const path: string = getSrcServicePath()
     return [path]
   });
 
-
+  /** 插入当前的exports.ts -> defineRequireConfig */
   api.addUmiExports(() => {
     return {
       specifiers: ['defineRequireConfig'],
       source: '../plugin-interface/exports'
     }
   });
+
+  api.addUmiExports(() => {
+    return {
+      exportAll: true,
+      source: '../plugin-interface/api'
+    }
+  })
 
 }

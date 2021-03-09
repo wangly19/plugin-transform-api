@@ -1,3 +1,5 @@
 {
-  "getUserInfo": "POST /mall-port/cccc"
+  "getUserInfo": "POST /mall-port/user/info",
+  "login": "POST /mall-port/user/login",
+  "deleteUser": "POST /mall-port/user/:id"
 }

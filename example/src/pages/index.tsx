@@ -1,11 +1,11 @@
 import styles from './index.less';
-import { user1 } from '@@/plugin-interface/api'
-
-import { defineRequireConfig } from 'umi'
+import { user1,  } from 'umi'
+import { user } from '@@/plugin-interface/api'
+import { useDispatch } from 'dva'
 
 export default function IndexPage() {
 
-  user1({},).then(res => {
+  user1().then(res => {
     console.log('res', res)
   })
 
