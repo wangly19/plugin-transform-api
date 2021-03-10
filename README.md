@@ -18,7 +18,7 @@
 
 <p align="center">
   <a href="https://github.com/shaojintian/Best_README_template/">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="./readme_logo.svg" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">@umijs/plugin-transform-api</h3>
@@ -186,7 +186,7 @@ export function deleteUser <T = any, O = Record<string, any>, R = any>(
 
 ### 如何引用
 
-当有了一份基于`typeScript`的接口函数，可以通过以下两种方式进行引入。a=a=a==
+当有了一份基于`typeScript`的接口函数，可以通过以下两种方式进行引入。默认来说当前的文件是使用`typescript`的，同时也希望尽量使用这些`api`，能够有更多的提示性。
 
 ```typeScript
 import { deleteUser } from 'umi'
@@ -199,6 +199,16 @@ import { deleteUser } from '@@/plugin-interface/api'
 deleteUser().then()
 ```
 
+### TypeScript支持
+
+默认的接口函数都是`TypeScript`格式写的。如果需要指定类型推导来说，目前来说是支持的。暂时给与了`T`, `O`, `R`三个泛型推导函数
+
+- T：当前传入`payload`传递进来的类型，也就是接口函数需要的一些类型。
+- O：当前接口内置的`config`设置，可以自己定义一些`method`, `header`的一些自定义行为。最常见就是更改接口请求的数据方式。
+- R：当前`Promise`的返回值，一般为`resoponse`。数据格式为后端接口请求的响应。
+
+如果需要使用`Typescript`将启用严格类型模式，请确保类型声明推导的正确合理性。
+
 ## 如何参与开源项目
 
 1. 克隆当前仓库
@@ -210,30 +220,20 @@ deleteUser().then()
 
 ## 贡献者
 
+- [@wangly19](github.com/wangly19)
+
+## 联系我 & 技术探讨
+
+- 微信：`Rzicon`：验证内容填写：`umi插件`
+- 加入技术研讨群：
+
+<img src="./images/微信群.png" />
+
 ## 资源
 
-- [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-- [Img Shields](https://shields.io)
-- [Choose an Open Source License](https://choosealicense.com)
-- [GitHub Pages](https://pages.github.com)
-- [Animate.css](https://daneden.github.io/animate.css)
-- [xxxxxxxxxxxxxx](https://connoratherton.com/loaders)
-
-<!-- links -->
-[your-project-path]:shaojintian/Best_README_template
-[contributors-shield]: https://img.shields.io/github/contributors/shaojintian/Best_README_template.svg?style=flat-square
-[contributors-url]: https://github.com/shaojintian/Best_README_template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/shaojintian/Best_README_template.svg?style=flat-square
-[forks-url]: https://github.com/shaojintian/Best_README_template/network/members
-[stars-shield]: https://img.shields.io/github/stars/shaojintian/Best_README_template.svg?style=flat-square
-[stars-url]: https://github.com/shaojintian/Best_README_template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/shaojintian/Best_README_template.svg?style=flat-square
-[issues-url]: https://img.shields.io/github/issues/shaojintian/Best_README_template.svg
-[license-shield]: https://img.shields.io/github/license/shaojintian/Best_README_template.svg?style=flat-square
-[license-url]: https://github.com/shaojintian/Best_README_template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/shaojintian
-
-
+- [umijs中文文档](https://umijs.org/zh-CN)
+- [umijs插件最佳实践](https://umijs.org/zh-CN/plugins/best-practice)
+- [umijs插件系统](https://github.com/umijs/plugins)
+- [掘金社区](juejin.im)
 
 
