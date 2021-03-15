@@ -1,13 +1,12 @@
 import { defineConfig } from 'umi';
 
-const request = () => 1
-
 export default defineConfig({
   plugins: [require.resolve('../lib')],
   nodeModulesTransform: {
     type: 'none',
   },
   dva: {
+    hmr: true,
   },
   routes: [
     { path: '/', component: '@/pages/index' },
