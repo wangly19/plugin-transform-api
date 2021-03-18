@@ -1,12 +1,13 @@
 {
-  "name": "@umijs/plugin-transform-api",
-  "main": "dist/index.js",
-  "types": "dist/util.d.ts",
+  "name": "plugin-transform-api",
+  "main": "lib/index.js",
   "description": "转换api目录下所有请求接口配置文件",
   "version": "1.0.0",
+  "private": false,
+  "license": "MIT",
   "authors": {
     "name": "wangly19",
-    "email": "18607948581@163.com"
+    "email": "1418202350@qq.com"
   },
   "repository": "github.com/wangly19/@umijs/plugin-transform-api",
   "scripts": {

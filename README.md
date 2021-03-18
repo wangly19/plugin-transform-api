@@ -1,23 +1,12 @@
-
-
 # 约定式接口编译时转换插件
 
 @umijs/plugin-transform-api
-
-<!-- PROJECT SHIELDS -->
-
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 <!-- PROJECT LOGO -->
 <br />
 
 <p align="center">
-  <a href="https://github.com/shaojintian/Best_README_template/">
+  <a href="https://github.com/wangly19/plugin-transform-api">
     <img src="./readme_logo.svg" alt="Logo" width="80" height="80">
   </a>
 
@@ -25,43 +14,27 @@
   <p align="center">
     一个开发编译时转换 <a>request interface</a> 插件，基于 <a>@umijs</a> 微内核插件开发。
     <br />
-    <a href="https://github.com/shaojintian/Best_README_template"><strong>探索本项目 »</strong></a>
+    <a href="https://github.com/wangly19/plugin-transform-api"><strong>探索本项目 »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/shaojintian/Best_README_template">查看示例</a>
+    <a href="https://github.com/wangly19/plugin-transform-api/tree/master/example">查看示例</a>
     ·
-    <a href="https://github.com/shaojintian/Best_README_template/issues">报告Bug</a>
+    <a href="https://github.com/wangly19/plugin-transform-api/issues">报告Bug</a>
     ·
-    <a href="https://github.com/shaojintian/Best_README_template/issues">提出新特性</a>
+    <a href="https://github.com/wangly19/plugin-transform-api/issues">提出新特性</a>
   </p>
 
 </p>
 
-
- 本篇README.md面向开发者
- 
-## 目录
-
-- [简介](##简介)
-- [文件目录说明](#文件目录说明)
-- [开发的架构](#开发的架构)
-- [部署](#部署)
-- [使用到的框架](#使用到的框架)
-- [贡献者](#贡献者)
-  - [如何参与开源项目](#如何参与开源项目)   
-- [版本控制](#版本控制)
-- [作者](#作者)
-- [鸣谢](#鸣谢)
+本篇 README.md 面向开发者
 
 ## 简介
 
 插件功能作用于约定式`API`接口配置的编译时转换，为`umijs`提供接口转换能力，开发者不再需要进行频繁的手写`service spi` 函数。插件会自动帮您转换成对应的`Promise<R>`的函数，只需要从`plugin`或者是`umi`中引用就可以完成接口请求的问题。
 
-
 插件相对来说是在编译时完成的，相对来说，会比运行时处理`约定式接口承诺`减少了多余的开销，利用`umijs`脚手架的`微内核`能力可以做到可拔插，剔除打包依赖的作用。
 
 > 配置 -> 接口函数 -> umi
-
 
 ## 使用方法
 
@@ -77,7 +50,7 @@ npm install plugin-interface -D
 
 ### 添加插件
 
-根据相应的开发配置引入插件，一般在`.umirc.ts` 或者 `config/*`下配置对应的配置可以对应注入相应功能。参考以下配置: 
+根据相应的开发配置引入插件，一般在`.umirc.ts` 或者 `config/*`下配置对应的配置可以对应注入相应功能。参考以下配置:
 
 ```ts
 export default defineConfig({
@@ -85,33 +58,30 @@ export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
   },
-  routes: [
-    { path: '/', component: '@/pages/index' },
-  ],
+  routes: [{ path: '/', component: '@/pages/index' }],
   fastRefresh: {},
   interface: {
     path: 'services',
-    requestPath: '@/utils/request'
-  }
+    requestPath: '@/utils/request',
+  },
 });
-
 ```
 
 相对应插件会在开发时监听对应文件夹下的文件，并且产生最新的`函数接口`。
 
 ### 参数配置
 
-|  名称   |  类型  | 描述 | 默认值 |
-|  ----  | ----  |---- | ---- |
-| path  | `string` | 定义目标当前需要监听的路径地址，默认配置为`api` | `api` |
-| requestPath  | `string` | 接口请求函数的页面地址，最终映射到`import()`当中使用 | `__` |
-| ...  | `any` |  待添加 | `__` |
+| 名称 | 类型 | 描述 | 默认值 |
+| --- | --- | --- | --- |
+| path | `string` | 定义目标当前需要监听的路径地址，默认配置为`api` | `api` |
+| requestPath | `string` | 接口请求函数的页面地址，最终映射到`import()`当中使用 | `__` |
+| ... | `any` | 待添加 | `__` |
 
 ### 添加一个配置
 
 如何添加一个最基本的配置来运行脚本添加工具？使用起来是非常方便的。
 
-#### JSON格式文件
+#### JSON 格式文件
 
 ```JSON
 {
@@ -138,12 +108,12 @@ module.export = {
 import request from 'umi-request'
 
 export function getUserInfo <T = any, O = Record<string, any>, R = any>(
-  payload?: T = {}, 
+  payload?: T = {},
   options?: O = {},
 ): Promise<R> {
 
     /* [info]: @no link params */
-  
+
   return request( `/mall-port/user/info`, {
     data: payload,
     method: 'POST',
@@ -153,12 +123,12 @@ export function getUserInfo <T = any, O = Record<string, any>, R = any>(
 
 
 export function login <T = any, O = Record<string, any>, R = any>(
-  payload?: T = {}, 
+  payload?: T = {},
   options?: O = {},
 ): Promise<R> {
 
     /* [info]: @no link params */
-  
+
   return request( `/mall-port/user/login`, {
     data: payload,
     method: 'POST',
@@ -168,12 +138,12 @@ export function login <T = any, O = Record<string, any>, R = any>(
 
 
 export function deleteUser <T = any, O = Record<string, any>, R = any>(
-  payload?: T = {}, 
+  payload?: T = {},
   options?: O = {},
 ): Promise<R> {
 
     const { id, ...data } = payload
-  
+
   return request( `/mall-port/user/${id}`, {
     data: data,
     method: 'POST',
@@ -199,7 +169,7 @@ import { deleteUser } from '@@/plugin-interface/api'
 deleteUser().then()
 ```
 
-### TypeScript支持
+### TypeScript 支持
 
 默认的接口函数都是`TypeScript`格式写的。如果需要指定类型推导来说，目前来说是支持的。暂时给与了`T`, `O`, `R`三个泛型推导函数
 
@@ -216,11 +186,15 @@ deleteUser().then()
 3. 提交你的代码修改 (`git commit -m 'Add some AmazingFeature'`)
 4. 推送到`Github`仓库 (`git push origin feature/AmazingFeature`)
 5. 与我联系后，打开一个`PR(Pull Request)`推送给我。
-6.  一星期后会进行仓库`branch merge`
+6. 一星期后会进行仓库`branch merge`
 
 ## 贡献者
 
 - [@wangly19](github.com/wangly19)
+
+## 开源协议
+
+- 查看开源协议：[MIT](https://github.com/wangly19/plugin-transform-api/blob/main/LICENSE)
 
 ## 联系我 & 技术探讨
 
@@ -231,9 +205,7 @@ deleteUser().then()
 
 ## 资源
 
-- [umijs中文文档](https://umijs.org/zh-CN)
-- [umijs插件最佳实践](https://umijs.org/zh-CN/plugins/best-practice)
-- [umijs插件系统](https://github.com/umijs/plugins)
+- [umijs 中文文档](https://umijs.org/zh-CN)
+- [umijs 插件最佳实践](https://umijs.org/zh-CN/plugins/best-practice)
+- [umijs 插件系统](https://github.com/umijs/plugins)
 - [掘金社区](juejin.im)
-
-
