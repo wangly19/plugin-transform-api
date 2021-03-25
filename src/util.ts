@@ -44,14 +44,20 @@ export function parsePathsInObject (
   paths: Array<string>
 ): Array<RequestBaseConfig> {
 
-  console.log('[create]: require')
-  return paths.map((p: string) => {
+  console.log(`[change]: fetch已刷新`)
 
-    console.log(require.resolve(p))
+  if (paths.length > 0 ) {
 
-    delete require.cache[require.resolve(p)]
-    return utils.compatESModuleRequire(require(p))
-  })
+    return paths.map((p: string) => {
+
+      console.log(require.resolve(p))
+  
+      delete require.cache[require.resolve(p)]
+      return utils.compatESModuleRequire(require(p))
+    })
+  }
+  return []
+
 }
 
 

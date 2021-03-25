@@ -82,10 +82,6 @@ export function getAllRequestModule(
   return utils.lodash.flatten(currentRequestConfigModule);
 }
 
-export function generateRequestFunctionConfig(requestQueue: Array<RequestASTModule>): Array<any> {
-
-}
-
 /**
  * 切割当前URL和Method为元组方法
  * @param { RequestMethodAndURL } configAttr 当前配置的url和method

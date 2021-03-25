@@ -19,13 +19,10 @@ export default function (api: IApi) {
    * 插件部分工具方法导出
    * @see https://umijs.org/zh-CN/plugins/api
    */
-  const { 
-    logger, 
+  const {
     paths, 
     utils 
   } = api
-
-  logger.info('正在加载transform-api插件')
 
   /**
    * 当前配置的目录路径
