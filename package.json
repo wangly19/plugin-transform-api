@@ -2,7 +2,7 @@
   "name": "plugin-transform-api",
   "main": "lib/index.js",
   "description": "转换api目录下所有请求接口配置文件",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "private": false,
   "license": "MIT",
   "authors": {
@@ -55,7 +55,6 @@
     "yorkie": "^2.0.0"
   },
   "gitHooks": {
-    "pre-commit": "lint-staged"
   },
   "files": [
     "lib"

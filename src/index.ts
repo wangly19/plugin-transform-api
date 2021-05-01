@@ -21,8 +21,16 @@ export default function (api: IApi) {
    */
   const {
     paths, 
-    utils 
+    utils,
+    logger
   } = api
+
+  /**
+   *  当前插件加载提示
+   */
+  api.onPluginReady(() => {
+    logger.info(`[success]: 接口编译插件运行成功`)
+  });
 
   /**
    * 当前配置的目录路径
@@ -63,6 +71,8 @@ export default function (api: IApi) {
    * @returns { unknown }
    */
   api.onGenerateFiles(async () => {
+
+    logger.info(`[hrm]: 接口配置修改已刷新`)
 
     const { Mustache } = utils
 
